@@ -1,6 +1,6 @@
 import time #Experience from Unity(C#)
 
-user_name = input("\nEnter Your Name: ")
+user_name = str(input("\nEnter Your Name: "))
 user_age = int(input("Enter Your Age: "))
 menu_input = ""
 
@@ -33,7 +33,7 @@ else:
             print("\nGame will be available soon! Returning to Main Menu..")
 
         elif menu_input == "n":
-            user_name = input("\nEnter Your Name: ")
+            user_name = str(input("\nEnter Your Name: "))
             print(f"\nName has been changed to {user_name}! Returning to Main Menu..")
 
         elif menu_input == "c":
