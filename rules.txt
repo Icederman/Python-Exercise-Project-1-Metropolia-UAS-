@@ -1,0 +1,15 @@
+In this game,
+
+You enter different areas which are the stages and pick up an unknown item. The item might be trash or it could be someone's belonging, you will get hints on what item it could be and you have to decide whether to throw it or report it to the police!
+
+If you throw trash in the dustbin or report someone's belonging you get points! 
+
+But...
+
+If you report trash to the police or throw someone's belonging in the dustbin, your life points are deducted!
+
+If your life points get to 0, the game ends and you have a final score.
+
+So, try your best to be a good citizen and continue to play the game and increase your score!
+
+(Two powerups can be used during the game)
