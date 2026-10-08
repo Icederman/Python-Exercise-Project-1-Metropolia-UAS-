@@ -1,227 +1,37 @@
 import time 
-import json
+from gamestarter_package import item_list_creator,room_list_creator,player_creator,start_game
+from menu_package import pre_game,exit_app,powerup_chooser,show_inventory,name_change,show_credits,invalid_com
+from intro_package import show_intro, show_rules
+from gamedata_package import game_load,game_save
 
 minor_border = 12
-game_loaded = False
+
+
 player = None
+item_collection = []
+room_list = []
 
 menu_input = ""
 powerup_inventory = []
 inventory_limit = 2
 trashbag = []
 
+def object_assignment():
+    global item_collection,room_list
 
-class Player():
-    def __init__(self,name,bag,location):
-        self.name = name
-        self.bag = bag
-        self.location = location
-
-    def save_player(self):
-        bg = []
-        for i in self.bag:
-            bg.append({"name": i.name, "weight": i.weight})
-
-        return {"name":self.name, "bag":bg, "location":self.location.name}
-
-class Room():
-    def __init__(self,name,item=""):
-        self.name = name
-        self.item = item
-
-class Item():
-    def __init__(self,name,weight):
-        self.name = name
-        self.weight = weight
-
-def show_intro(filename):
-    try:
-        with open(filename, "r") as file:
-            print(f"\n{file.read()}")
-    except FileNotFoundError:
-        print("File not found!")
-
-def show_rules(filename):
-    try:
-        with open(filename, "r") as file:
-            print(f"\n{file.read()}")
-    except FileNotFoundError:
-        print("File not found!")        
-
-def pre_game():
-    print("\nEnter N to start new game\nEnter L to load game from last save\nEnter E to exit")
-    user_pre_raw = str(input("\nEnter command: "))
-    user_pre_com = user_pre_raw.lower()
-    return user_pre_com
-
-def game_load():
-    global player, user_name, user_age, game_loaded
-    try:
-        filename = f"save_{user_name}.json"
-        with open(filename, "r") as file:
-            player_data = json.load(file)
-            
-    except FileNotFoundError:
-        print("\nNo saved game found!")
-        return
+    item_collection = item_list_creator()
+    room_list = room_list_creator(item_collection)
     
-    if user_name == player_data["user_name"] and user_age == player_data["user_age"]:
-        p = player_data["player"]
-        bag = []
-        for i in p["bag"]:
-            bag.append(Item(i["name"], i["weight"]))
 
-        location = Room(p["location"])
-
-        player = Player(p["name"], bag, location)
-
-        game_loaded = True
-
-    else:
-        print("\nNo saved game with your name and age!")
-
-
-
-def game_save(player):
-    player_data = {
-        "user_name": user_name,
-        "user_age": user_age,
-        "player": player.save_player()
-    }
-
-    filename = f"save_{user_name}.json"
-    with open(filename, "w") as file:
-        json.dump(player_data, file)
-
-def start_game():
+def player_assignment():
     global player
-    print("\nLoading Game...")
-    time.sleep(2)
-    print("\nLoading..")
-    time.sleep(1)
-    print("\nLoading.")
-    time.sleep(1)
-    print("\nGame Started!")
-    time.sleep(1)
+    player = player_creator(player,user_name,trashbag,room_list)
 
-    item_1 = Item("Banana peel", 30)
-    item_2 = Item("Candy wrapper", 5)
-    item_3 = Item("Wallet", 200)
-
-    item_coll = [item_1,item_2,item_3]
-
-    room_0 = Room("Home")
-    room_1 = Room("Parking lot", item_1)
-    room_2 = Room("Alley", item_2)
-    room_3 = Room("Football field", item_3)
-
-    item_rooms = [room_1,room_2,room_3]
-
-    if player == None:
-        player = Player(user_name, trashbag, room_0)
-
-
-    def movement_inp():
-        print(f"\nYou are currently at {player.location.name}.\n\nEnter W to move to the next location\nEnter E to end game")
-        user_mov_raw = str(input("\nEnter command: "))
-        user_mov_com = user_mov_raw.lower()
-        return user_mov_com
-
-    def pickup_input():
-        print(f"\nEntering {player.location.name}..")
-        time.sleep(1)
-        print(f"You entered {player.location.name}!")
-        time.sleep(1)
-        print(f"\nYou have encountered an item!\nEnter P to pick it up!")
-        user_pick_raw = str(input("\nEnter command: "))
-        user_pick_com = user_pick_raw.lower()
-        return user_pick_com
-        
-
-    user_mov = movement_inp()
-    i=0
-
-    while i >= 0 and i <= 2:
-        if user_mov == "w":
-            player.location = item_rooms[i]
-            user_pick = pickup_input()
-
-            if user_pick == "p":
-                player.item = item_coll[i]
-                print(f"\nYou have picked the item!")
-                player.bag.append(player.item)
-                i+=1
-                time.sleep(2)
-                if i != 3:
-                    user_mov = movement_inp()
-                else:
-                    print("\nDone!")
-                    #More code upcoming!
-            else:
-                print("\nInvalid command!")
-                time.sleep(1)
-
-        elif user_mov == "e":
-            print("\nReturning to Main Menu!")
-            break
-        else:
-            print("\nInvalid Command! Try Again!")
-            time.sleep(1)
-            user_mov = movement_inp()    
-    
-    
-def powerup_chooser():
-
-    while len(powerup_inventory) < inventory_limit:
-        print("\nChoose your powerups:\n\nHappiness\tLife\tSkipItem\tLuck")
-        powerup_inp = str(input("\nEnter the powerup you want: "))
-        powerup = powerup_inp.lower()
-        if powerup == "happiness" or powerup == "life" or powerup == "skipitem" or powerup ==  "luck":
-            print("\nPutting chosen powerup in your inventory..\n")
-            time.sleep(1)
-            powerup_inventory.append(powerup)
-        else:
-            print("\nNot available! Choose again!\n")
-            time.sleep(1)
-
-    if len(powerup_inventory) == 2:
-        print("Inventory full!")
-            
-
-
-def show_inventory():
-    print("\nPowerups:")
-    for i in powerup_inventory:
-        print(f"\t{i}")
-    if(len(powerup_inventory) == 0):
-        print("\nYou have not chosen the powerups yet!")
-
-def show_powerups():
-    for n in powerup_inventory:
-        print(n)
-
-
-def name_change():
-    global user_name
-    user_name = str(input("\nEnter Your Name: "))
-    print(f"\nName has been changed to {user_name}! Returning to Main Menu..")
-
-def show_credits():
-    time.sleep(1)
-    print("\nProject creator: Safwan MD Solaiman")
-    print("\nReturning to Main Menu..")
-
-def exit_app():
-    print("\nExiting Game!\n")
-    time.sleep(2)
-
-def invalid_com():
-    print("\nCommand is not valid! Returning to Main Menu..")
-
+# Main
 show_intro("intro.txt")
-time.sleep(3)
+time.sleep(1)
 show_rules("rules.txt")
-time.sleep(15)
+time.sleep(1)
 user_name = str(input("\nEnter Your Name: "))
 user_age = int(input("Enter Your Age: "))
 print(f"\nName: {user_name}")
@@ -248,10 +58,12 @@ else:
 
                 if user_pre == "n":
                     command_started = True
-                    start_game()
+                    object_assignment()
+                    player_assignment()
+                    start_game(player,item_collection,room_list)
 
                 elif user_pre == "l":
-                    game_load()
+                    player = game_load(user_name,user_age)
 
                     if player == None:
                         command_started = False
@@ -260,9 +72,11 @@ else:
 
                     else:
                         command_started = True
-                        print("Continuing from previous save..")
+                        print("\nContinuing from previous save..")
                         time.sleep(1)
-                        start_game()
+                        object_assignment()
+                        start_game(player,item_collection,room_list)
+                        
 
                 elif user_pre == "e":
                     command_started = True
@@ -274,13 +88,13 @@ else:
                     user_pre = pre_game()
 
         elif menu_input == "p":
-            powerup_chooser()
+            powerup_chooser(powerup_inventory,inventory_limit)
 
         elif menu_input == "i":
-            show_inventory()
+            show_inventory(powerup_inventory)
                 
         elif menu_input == "n":
-            name_change()
+            user_name = name_change()
 
         elif menu_input == "r":
             show_rules("rules.txt")
@@ -301,7 +115,7 @@ else:
                 if exit_input == "y":
                     if player != None:
                         print("Saving game...")
-                        game_save(player)
+                        game_save(user_name,user_age,player)
                         time.sleep(1)
                         print("Game saved!")
                         game_ended = True
