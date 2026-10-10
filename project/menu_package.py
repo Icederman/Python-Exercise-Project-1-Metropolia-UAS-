@@ -1,7 +1,7 @@
 import time
 
 def pre_game():
-    print("\nEnter N to start new game\nEnter L to load game from last save\nEnter E to exit")
+    print("\nEnter N to start new game\nEnter L to load game from last save or to see your previous score\nEnter E to exit")
     user_pre_raw = str(input("\nEnter command: "))
     user_pre_com = user_pre_raw.lower()
     return user_pre_com

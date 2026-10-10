@@ -1,11 +1,10 @@
-import time 
+import time # Idea came from Unity coroutines
 from gamestarter_package import item_list_creator,room_list_creator,player_creator,start_game
 from menu_package import pre_game,exit_app,powerup_chooser,show_inventory,name_change,show_credits,invalid_com
 from intro_package import show_intro, show_rules
-from gamedata_package import game_load,game_save
+from gamedata_package import game_load
 
 minor_border = 12
-
 
 player = None
 item_collection = []
@@ -16,24 +15,42 @@ powerup_inventory = []
 inventory_limit = 2
 trashbag = []
 
+# Takes the list of items and rooms and assigns them to global variables to be used throughout the program
 def object_assignment():
     global item_collection,room_list
 
     item_collection = item_list_creator()
     room_list = room_list_creator(item_collection)
     
-
+# Creates the player object
 def player_assignment():
     global player
-    player = player_creator(player,user_name,trashbag,room_list)
+    player = player_creator(player,user_name,room_list) 
 
-# Main
+# This part contains the outer part of the game as in the main menu functionality and game launching code.
 show_intro("intro.txt")
-time.sleep(1)
+time.sleep(3)
 show_rules("rules.txt")
-time.sleep(1)
+time.sleep(15)
+
 user_name = str(input("\nEnter Your Name: "))
-user_age = int(input("Enter Your Age: "))
+while user_name == "":
+    print("You have to enter a name!")
+    user_name = str(input("\nEnter Your Name: "))
+   
+correct_age = False
+
+while correct_age == False:
+    try:
+        user_age = int(input("Enter Your Age: "))
+
+    except ValueError:
+        print("\nAge needs to be an integer")
+        correct_age = False
+
+    else:
+        correct_age = True
+
 print(f"\nName: {user_name}")
 print(f"Age: {user_age}")
 
@@ -60,7 +77,7 @@ else:
                     command_started = True
                     object_assignment()
                     player_assignment()
-                    start_game(player,item_collection,room_list)
+                    start_game(player,user_name,user_age,room_list)
 
                 elif user_pre == "l":
                     player = game_load(user_name,user_age)
@@ -70,12 +87,15 @@ else:
                         time.sleep(1)
                         user_pre = pre_game()
 
+                    elif player.citizen_life <= 0:
+                        print(f"Your previous score: {player.citizen_life}")
+
                     else:
                         command_started = True
                         print("\nContinuing from previous save..")
                         time.sleep(1)
                         object_assignment()
-                        start_game(player,item_collection,room_list)
+                        start_game(player,user_name,user_age,room_list)
                         
 
                 elif user_pre == "e":
@@ -104,34 +124,7 @@ else:
             show_credits()
 
         elif menu_input == "lopeta":
-
-            game_ended = False
-
-            while game_ended == False: 
-                print("Do you wish to save the game before exiting?\nEnter Y to save game\nEnter N to exit without saving")
-                exit_input_raw = str(input("\nEnter command: "))
-                exit_input = exit_input_raw.lower()
-
-                if exit_input == "y":
-                    if player != None:
-                        print("Saving game...")
-                        game_save(user_name,user_age,player)
-                        time.sleep(1)
-                        print("Game saved!")
-                        game_ended = True
-                        exit_app()
-
-                    else:
-                        print("As game was not started, there was no data to save!")
-                        game_ended = True
-                        exit_app()
-
-                elif exit_input == "n":
-                    game_ended = True
-                    exit_app()
-
-                else:
-                    print("\nInvalid Command! Try Again!")
+            exit_app()
 
         else:
             invalid_com()
