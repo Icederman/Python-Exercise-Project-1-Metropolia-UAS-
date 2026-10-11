@@ -5,28 +5,32 @@ from menu_funcs import exit_app
 
 # Code when the game ends
 def game_ender(user_name,user_age,player):
-    exit_input_raw = str(input("\nEnter command: "))
-    exit_input = exit_input_raw.lower()
+    data_decision = False
 
-    if exit_input == "y":
-        if player != None:
-            print("\nSaving game...")
-            game_save(user_name,user_age,player)
-            time.sleep(1)
-            print("Game saved!")
-            game_ended = True
+    while data_decision == False:
+        exit_input_raw = str(input("\nEnter command: "))
+        exit_input = exit_input_raw.lower()
+
+        if exit_input == "y":
+            if player != None:
+                print("\nSaving game...")
+                game_save(user_name,user_age,player)
+                time.sleep(1)
+                print("Game saved!")
+                data_decision = True
+                exit_app()
+
+            else:
+                print("As game was not started, there was no data to save!")
+                data_decision = True
+                exit_app()
+
+        elif exit_input == "n":
+            data_decision = True
             exit_app()
 
         else:
-            print("As game was not started, there was no data to save!")
-
-            exit_app()
-
-    elif exit_input == "n":
-        exit_app()
-
-    else:
-        print("\nInvalid Command! Try Again!")
+            print("\nInvalid Command! Try Again!")
     
 
 # This code contains the internal part (Game Menu) of the game which starts when the game is started from the Main Menu
@@ -88,7 +92,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
         if n.name == player.location.name:
             i = area_list.index(n)
 
-    while i >= 0 and i < len(area_list) - 1:
+    while i >= 0 and i < len(area_list) - 1 and game_ended == False:
         if user_mov == "w":
             player.location = area_list[i+1]
 
@@ -156,15 +160,19 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
             while game_ended == False: 
                 print("\nDo you wish to save the game before exiting?\nEnter Y to save game\nEnter N to exit without saving")
                 game_ender(user_name,user_age,player)
+                print("\nReturning to Main Menu!")
                 game_ended = True
-            print("\nReturning to Main Menu!")
+                
+                
             
         else:
             print("\nInvalid Command! Try Again!")
             time.sleep(1)
             user_mov = movement_inp()
 
-    print("Congratulations!!!! You are the Ultimate Global Citizen !!!!")
+    if player.citizen_points == 100:
+        print("Congratulations!!!! You are the Ultimate Global Citizen !!!!")
+
     while game_ended == False: 
         print("\nDo you wish to save the game before exiting?\nEnter Y to save game\nEnter N to exit without saving")
         game_ender(user_name,user_age,player)
