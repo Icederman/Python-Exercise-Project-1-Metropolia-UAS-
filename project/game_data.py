@@ -1,8 +1,8 @@
 import main_classes
 import json
-from pathcreator_package import path_creator
+from path_creator import path_creator
 
-# Saves user data in dictionary form and uses a nested dictionary created from method of player class to save the required data for continuation. 
+# Saves user data in dictionary form created from method of player class to save the required data for continuation in json format. 
 def game_save(user_name,user_age,player):
     player_data = {
         "user_name": user_name,
@@ -16,8 +16,7 @@ def game_save(user_name,user_age,player):
         json.dump(player_data, file)
 
 # Loads the data of a player if the user of that player comes back and their name and age matches.
-# Uses the player key and retrieves the internal dictionary which has properties of the saved player object
-# Uses the values of the internal dictionary and returns the recreated player object
+# Returns a new Player object with similar properties after retrieving the values so that we can assign it to a player variable and work with that during the game.
 def game_load(user_name, user_age):
     try:
         filename = f"save_{user_name}.json"
@@ -32,9 +31,7 @@ def game_load(user_name, user_age):
     if user_name == player_data["user_name"] and user_age == player_data["user_age"]:
         p = player_data["player"]
 
-        location = main_classes.Room(p["location"])
-
-        return main_classes.Player(p["name"], location, p["citizen_life"], p["citizen_points"])
+        return main_classes.Player(p["name"], p["location"], p["powerup_inventory"], p["area"], p["citizen_life"], p["citizen_points"])
 
     else:
         print("\nNo saved game with your name and age!")

@@ -1,0 +1,10 @@
+There are three types of powerups!
+
+Reveal:
+Using this powerup reveals the encountered item!
+
+Life:
+Using this powerup is a potion which increases Citizen life by 10!
+
+Skip:
+Using this powerup can skip the current encountered item!

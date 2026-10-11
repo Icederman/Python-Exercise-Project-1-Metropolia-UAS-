@@ -1,36 +1,43 @@
 import time # Idea came from Unity coroutines
-from gamestarter_package import item_list_creator,room_list_creator,player_creator,start_game
-from menu_package import pre_game,exit_app,powerup_chooser,show_inventory,name_change,show_credits,invalid_com
-from intro_package import show_intro, show_rules
-from gamedata_package import game_load
+from game_manager import start_game
+from menu_funcs import pre_game,exit_app,powerup_chooser,show_inventory,name_change,show_credits,invalid_com
+from text_reader import read_text
+from classes_powerup_handler import item_list_creator, area_list_creator, player_creator
+from game_data import game_load
 
 minor_border = 12
 
 player = None
 item_collection = []
-room_list = []
+area_list = []
+area = ""
 
 menu_input = ""
 powerup_inventory = []
+selected_powerup = ""
 inventory_limit = 2
-trashbag = []
+skip_flag = False
 
-# Takes the list of items and rooms and assigns them to global variables to be used throughout the program
-def object_assignment():
-    global item_collection,room_list
+# Takes the list of items and areas and assigns them to global variables to be used throughout the program
+# Uses the functions to create list of areas and items
+def object_assignment(area):
+    global item_collection,area_list
 
     item_collection = item_list_creator()
-    room_list = room_list_creator(item_collection)
+    area_list = area_list_creator(item_collection,area)
     
 # Creates the player object
 def player_assignment():
     global player
-    player = player_creator(player,user_name,room_list) 
+    player = player_creator(player,user_name,area_list,powerup_inventory,area) 
 
 # This part contains the outer part of the game as in the main menu functionality and game launching code.
-show_intro("intro.txt")
+# Prevents players under 12 (k-12)
+# Reads files
+# Calls relevant functions when running the game such as starting new game, loading the game etc and handles the Main Menu paths as well.
+read_text("intro.txt")
 time.sleep(3)
-show_rules("rules.txt")
+read_text("rules.txt")
 time.sleep(15)
 
 user_name = str(input("\nEnter Your Name: "))
@@ -69,15 +76,29 @@ else:
         if menu_input == "s":
 
             command_started = False
+            if powerup_inventory == []:
+                print("\nDisclaimer: You have started without choosing any powerups! It can be still chosen from the Main menu")
+                time.sleep(2)
             user_pre = pre_game()
 
             while command_started != True:
 
                 if user_pre == "n":
                     command_started = True
-                    object_assignment()
+                    route_chosen = False
+
+                    while route_chosen == False:
+                        area_raw = str(input("\nChoose your route: Neighborhood\t\tDownTown\tOutdoors\n"))
+                        area = area_raw.lower()
+
+                        if area == "neighborhood" or area == "downtown" or area == "outdoors":
+                            object_assignment(area)
+                            route_chosen = True
+                        else:
+                            print("No such route exists!")
+
                     player_assignment()
-                    start_game(player,user_name,user_age,room_list)
+                    start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag)
 
                 elif user_pre == "l":
                     player = game_load(user_name,user_age)
@@ -94,8 +115,8 @@ else:
                         command_started = True
                         print("\nContinuing from previous save..")
                         time.sleep(1)
-                        object_assignment()
-                        start_game(player,user_name,user_age,room_list)
+                        object_assignment(player.area)
+                        start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag)
                         
 
                 elif user_pre == "e":
@@ -108,6 +129,8 @@ else:
                     user_pre = pre_game()
 
         elif menu_input == "p":
+            read_text("powerup_info.txt")
+            time.sleep(5)
             powerup_chooser(powerup_inventory,inventory_limit)
 
         elif menu_input == "i":
@@ -117,7 +140,7 @@ else:
             user_name = name_change()
 
         elif menu_input == "r":
-            show_rules("rules.txt")
+            read_text("rules.txt")
             time.sleep(10)
 
         elif menu_input == "c":
