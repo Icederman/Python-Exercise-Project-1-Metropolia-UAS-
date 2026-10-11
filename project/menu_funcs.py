@@ -8,9 +8,9 @@ def pre_game():
     return user_pre_com
 
 # This function is built for the user to choose two unique powerups from the option of 3!
-def powerup_chooser(powerup_inventory,inventory_limit):
+def powerup_chooser(powerup_inventory,inventory_limit,powerup_taken):
 
-    while len(powerup_inventory) < inventory_limit:
+    while len(powerup_inventory) < inventory_limit and powerup_taken == False:
         print("\nChoose your powerups:\n\nReveal\tLife\tSkip")
         powerup_inp = str(input("\nEnter the powerup you want: "))
         powerup = powerup_inp.lower()
@@ -25,7 +25,7 @@ def powerup_chooser(powerup_inventory,inventory_limit):
         else:
             print("\nInvalid! Try again.")
             time.sleep(1)
-    if len(powerup_inventory) == 2:
+    if len(powerup_inventory) == 2 or powerup_taken == True:
         print("Inventory full!")
 
 # This function displays the powerups

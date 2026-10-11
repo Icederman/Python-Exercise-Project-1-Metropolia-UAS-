@@ -143,7 +143,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
 
                 while game_ended == False:
                     print("\nDo you wish to save your points before exiting?\nEnter Y to save game\nEnter N to exit without saving")
-                    game_ender(game_ended,user_name,user_age,player)
+                    game_ender(user_name,user_age,player)
             else:
                 i += 1
                 item_dealt = False
@@ -166,7 +166,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
     print("Congratulations!!!! You are the Ultimate Global Citizen !!!!")
     while game_ended == False: 
         print("\nDo you wish to save the game before exiting?\nEnter Y to save game\nEnter N to exit without saving")
-        game_ender(game_ended,user_name,user_age,player)
+        game_ender(user_name,user_age,player)
     
 
     

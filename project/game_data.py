@@ -31,7 +31,7 @@ def game_load(user_name, user_age):
     if user_name == player_data["user_name"] and user_age == player_data["user_age"]:
         p = player_data["player"]
 
-        return main_classes.Player(p["name"], p["location"], p["powerup_inventory"], p["area"], p["citizen_life"], p["citizen_points"])
+        return main_classes.Player(p["name"], p["location"], p["powerup_inventory"], p["area"], p["powerup_taken"], p["citizen_life"], p["citizen_points"])
 
     else:
         print("\nNo saved game with your name and age!")

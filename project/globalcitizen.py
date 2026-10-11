@@ -17,6 +17,7 @@ powerup_inventory = []
 selected_powerup = ""
 inventory_limit = 2
 skip_flag = False
+powerup_taken = False
 
 # Takes the list of items and areas and assigns them to global variables to be used throughout the program
 # Uses the functions to create list of areas and items
@@ -29,7 +30,7 @@ def object_assignment(area):
 # Creates the player object
 def player_assignment():
     global player
-    player = player_creator(player,user_name,area_list,powerup_inventory,area) 
+    player = player_creator(player,user_name,area_list,powerup_inventory,area,powerup_taken) 
 
 # This part contains the outer part of the game as in the main menu functionality and game launching code.
 # Prevents players under 12 (k-12)
@@ -131,7 +132,8 @@ else:
         elif menu_input == "p":
             read_text("powerup_info.txt")
             time.sleep(5)
-            powerup_chooser(powerup_inventory,inventory_limit)
+            powerup_chooser(powerup_inventory,inventory_limit,powerup_taken)
+            powerup_taken = True
 
         elif menu_input == "i":
             show_inventory(powerup_inventory)

@@ -1,10 +1,11 @@
 # Main player class
 class Player():
-    def __init__(self,name,location,powerup_inventory,area,citizen_life = 100,citizen_points=0):
+    def __init__(self,name,location,powerup_inventory,area,powerup_taken,citizen_life = 100,citizen_points=0):
         self.name = name
         self.location = location
         self.powerup_inventory = powerup_inventory
         self.area = area
+        self.powerup_taken = powerup_taken
         self.citizen_life = citizen_life
         self.citizen_points = citizen_points
         
@@ -15,6 +16,7 @@ class Player():
             "name":self.name, "location":self.location.name,
             "powerup_inventory": self.powerup_inventory, 
             "area": self.area,
+            "powerup_taken":self.powerup_taken,
             "citizen_life": self.citizen_life, 
             "citizen_points": self.citizen_points
             }
@@ -24,7 +26,7 @@ class Area():
     def __init__(self,name,item=""):
         self.name = name
         self.item = item
-        
+
 # Item class
 class Item():
     def __init__(self,name,riddle,weight,trash = True):

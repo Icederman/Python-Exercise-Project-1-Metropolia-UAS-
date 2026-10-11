@@ -81,9 +81,9 @@ def area_list_creator(item_collection,area):
     return area_list
 
 # Creates a player object if there is no player object (Controlling creation of player object if it already exists from load)
-def player_creator(player,user_name,area_list,powerup_inventory,area):
+def player_creator(player,user_name,area_list,powerup_inventory,area,powerup_taken):
     if player == None:
-        return main_classes.Player(user_name,area_list[0],powerup_inventory,area)
+        return main_classes.Player(user_name,area_list[0],powerup_inventory,area,powerup_taken)
 
 # Contains the powerup choice function which asks the player if they want to use their powerup and the code works accordingly and returns the selected powerup
 def powerup_choice(powerup_inventory):
