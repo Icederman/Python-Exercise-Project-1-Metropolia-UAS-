@@ -5,7 +5,6 @@ from menu_funcs import exit_app
 
 # Code when the game ends
 def game_ender(user_name,user_age,player):
-    global game_ended 
     exit_input_raw = str(input("\nEnter command: "))
     exit_input = exit_input_raw.lower()
 
@@ -20,11 +19,10 @@ def game_ender(user_name,user_age,player):
 
         else:
             print("As game was not started, there was no data to save!")
-            game_ended = True
+
             exit_app()
 
     elif exit_input == "n":
-        game_ended = True
         exit_app()
 
     else:
@@ -33,6 +31,8 @@ def game_ender(user_name,user_age,player):
 
 # This code contains the internal part (Game Menu) of the game which starts when the game is started from the Main Menu
 def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
+
+    game_ended = False
 
     def movement_inp():
             print(f"\nYou are currently at {player.location.name}.\n\nEnter W to move to the next location\nEnter E to end game")
@@ -144,6 +144,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
                 while game_ended == False:
                     print("\nDo you wish to save your points before exiting?\nEnter Y to save game\nEnter N to exit without saving")
                     game_ender(user_name,user_age,player)
+                    game_ended = True
             else:
                 i += 1
                 item_dealt = False
@@ -154,8 +155,8 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
             
             while game_ended == False: 
                 print("\nDo you wish to save the game before exiting?\nEnter Y to save game\nEnter N to exit without saving")
-                game_ender(game_ended,user_name,user_age,player)
-                
+                game_ender(user_name,user_age,player)
+                game_ended = True
             print("\nReturning to Main Menu!")
             
         else:
@@ -167,6 +168,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
     while game_ended == False: 
         print("\nDo you wish to save the game before exiting?\nEnter Y to save game\nEnter N to exit without saving")
         game_ender(user_name,user_age,player)
+        game_ended = True
     
 
     
