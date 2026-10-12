@@ -110,7 +110,11 @@ else:
                         user_pre = pre_game()
 
                     elif player.citizen_life <= 0:
-                        print(f"Your previous score: {player.citizen_life}")
+                        command_started = True
+                        print("Your Citizen Life already ended!")
+                        time.sleep(2)
+                        print(f"Your previous score: {player.citizen_points}")
+                        time.sleep(3)
 
                     else:
                         command_started = True

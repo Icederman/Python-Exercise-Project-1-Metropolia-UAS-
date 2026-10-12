@@ -92,7 +92,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
         if n.name == player.location.name:
             i = area_list.index(n)
 
-    while i >= 0 and i < len(area_list) - 1 and game_ended == False:
+    while i >= 0 and i < len(area_list) - 1 and game_ended == False and player.alive == True:
         if user_mov == "w":
             player.location = area_list[i+1]
 
@@ -111,7 +111,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
                         time.sleep(2)
                     else:
                         print(f"\nYou threw someone's {player.location.item.name} in the trash and now they might never find it! Citizen life deducted!")
-                        player.citizen_life -= 10
+                        player.citizen_life -= 50
                         time.sleep(1)
                         print(f"\nCurrent Citizen life: {player.citizen_life}")
                         print(f"Current Citizen points: {player.citizen_points}")
@@ -129,7 +129,7 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
                         time.sleep(2)
                     else:
                         print(f"\nPolice officer: Why did you bring {player.location.item.name} here?! Citizen life deducted!")
-                        player.citizen_life -= 10
+                        player.citizen_life -= 25
                         time.sleep(1)
                         print(f"\nCurrent Citizen life: {player.citizen_life}")
                         print(f"Current Citizen points: {player.citizen_points}")
@@ -144,7 +144,8 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
 
             if player.citizen_life <= 0:
                 print(f"\nSadly your global citizen life ends here! Final score: {player.citizen_points}. Good luck next time!")
-
+                player.alive = False
+                time.sleep(3)
                 while game_ended == False:
                     print("\nDo you wish to save your points before exiting?\nEnter Y to save game\nEnter N to exit without saving")
                     game_ender(user_name,user_age,player)
@@ -170,8 +171,9 @@ def start_game(player,user_name,user_age,area_list,selected_powerup,skip_flag):
             time.sleep(1)
             user_mov = movement_inp()
 
-    if player.citizen_points == 100:
+    if player.location.name == "Warehouse rooftop" or player.location.name == "Mall rooftop" or player.location.name == "Mountain peak":
         print("Congratulations!!!! You are the Ultimate Global Citizen !!!!")
+        time.sleep(5)
 
     while game_ended == False: 
         print("\nDo you wish to save the game before exiting?\nEnter Y to save game\nEnter N to exit without saving")

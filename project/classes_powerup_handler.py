@@ -133,7 +133,7 @@ def powerup_usage(selected_powerup,player):
 
     elif selected_powerup == "life":
         player.citizen_life += 10
-        print(f"\nYour Citizen life has been increaded! Current Citizen life: {player.citizen_life}")
+        print(f"\nYour Citizen life has been increased! Current Citizen life: {player.citizen_life}")
         return False
     
     else:

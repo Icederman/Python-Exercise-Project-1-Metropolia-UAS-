@@ -33,7 +33,7 @@ def game_load(user_name, user_age):
 
         location = main_classes.Area(p["location"])
 
-        return main_classes.Player(p["name"], location, p["powerup_inventory"], p["area"], p["powerup_taken"], p["citizen_life"], p["citizen_points"])
+        return main_classes.Player(p["name"], location, p["powerup_inventory"], p["area"], p["powerup_taken"],p["alive"], p["citizen_life"], p["citizen_points"])
 
     else:
         print("\nNo saved game with your name and age!")
